@@ -1,4 +1,5 @@
 import { ContractType } from '../types';
+import { ArrowRight } from 'lucide-react';
 
 interface ContractTypeSelectorProps {
   selectedType: ContractType | null;
@@ -8,41 +9,64 @@ interface ContractTypeSelectorProps {
 const contractTypes = [
   {
     id: 'services' as const,
-    label: 'Contrato de Prestación de Servicios',
-    description: 'Para servicios profesionales'
+    label: 'Prestación de Servicios',
+    description: 'Para servicios profesionales entre partes',
+    number: '01'
   },
   {
     id: 'rental' as const,
-    label: 'Contrato de Arrendamiento',
-    description: 'Para alquiler de inmuebles'
+    label: 'Arrendamiento',
+    description: 'Para alquiler de inmuebles',
+    number: '02'
   },
   {
     id: 'collaboration' as const,
-    label: 'Contrato de Colaboración',
-    description: 'Entre autónomos o empresas'
+    label: 'Colaboración',
+    description: 'Entre autónomos o empresas',
+    number: '03'
   }
 ];
 
 export default function ContractTypeSelector({ selectedType, onTypeSelect }: ContractTypeSelectorProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-8">
-      <h2 className="text-2xl font-semibold text-gray-900 mb-6">Selecciona el tipo de contrato</h2>
-      <div className="space-y-3">
-        {contractTypes.map((type) => (
-          <button
-            key={type.id}
-            onClick={() => onTypeSelect(type.id)}
-            className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-              selectedType === type.id
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+    <div className="space-y-3">
+      {contractTypes.map((type) => (
+        <button
+          key={type.id}
+          onClick={() => onTypeSelect(type.id)}
+          className={`w-full text-left p-6 rounded-2xl border transition-all duration-200 group flex items-center justify-between ${
+            selectedType === type.id
+              ? 'border-[#1a1a1a] bg-[#1a1a1a] text-white'
+              : 'border-[#E8E6E0] bg-white hover:border-[#1a1a1a]'
+          }`}
+        >
+          <div className="flex items-center gap-5">
+            <span className={`text-xs font-medium tracking-widest ${
+              selectedType === type.id ? 'text-[#666]' : 'text-[#C0BDB8]'
+            }`}>
+              {type.number}
+            </span>
+            <div>
+              <p className={`text-sm font-medium mb-0.5 ${
+                selectedType === type.id ? 'text-white' : 'text-[#1a1a1a]'
+              }`}>
+                {type.label}
+              </p>
+              <p className={`text-xs ${
+                selectedType === type.id ? 'text-[#999]' : 'text-[#B0ADA8]'
+              }`}>
+                {type.description}
+              </p>
+            </div>
+          </div>
+          <ArrowRight
+            size={16}
+            className={`shrink-0 transition-transform duration-200 group-hover:translate-x-1 ${
+              selectedType === type.id ? 'text-white' : 'text-[#C0BDB8]'
             }`}
-          >
-            <div className="font-semibold text-gray-900">{type.label}</div>
-            <div className="text-sm text-gray-600">{type.description}</div>
-          </button>
-        ))}
-      </div>
+          />
+        </button>
+      ))}
     </div>
   );
 }

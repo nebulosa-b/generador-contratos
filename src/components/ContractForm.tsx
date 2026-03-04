@@ -11,231 +11,137 @@ export default function ContractForm({ contractType, formData, onFormChange }: C
     onFormChange({ ...formData, [field]: value });
   };
 
-  const inputClassName = 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none';
-  const labelClassName = 'block text-sm font-medium text-gray-700 mb-2';
+  const inputClass = `
+    w-full px-0 py-2.5 bg-transparent border-0 border-b border-[#E0DDD8]
+    text-sm text-[#1a1a1a] placeholder-[#C0BDB8]
+    focus:outline-none focus:border-[#1a1a1a] transition-colors duration-200
+  `;
+
+  const selectClass = `
+    w-full px-0 py-2.5 bg-transparent border-0 border-b border-[#E0DDD8]
+    text-sm text-[#1a1a1a] appearance-none cursor-pointer
+    focus:outline-none focus:border-[#1a1a1a] transition-colors duration-200
+  `;
+
+  const textareaClass = `
+    w-full px-3 py-3 bg-white border border-[#E0DDD8] rounded-lg
+    text-sm text-[#1a1a1a] placeholder-[#C0BDB8] resize-none
+    focus:outline-none focus:border-[#1a1a1a] transition-colors duration-200
+  `;
+
+  const labelClass = 'block text-xs font-medium tracking-widest text-[#999] uppercase mb-2';
+
+  const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+    <div className="mb-10">
+      <div className="flex items-center gap-3 mb-6">
+        <span className="text-xs font-medium tracking-widest text-[#1a1a1a] uppercase">{title}</span>
+        <div className="flex-1 h-px bg-[#E8E6E0]" />
+      </div>
+      <div className="space-y-6">{children}</div>
+    </div>
+  );
 
   return (
-    <form className="space-y-6">
-      <fieldset className="border border-gray-200 rounded-lg p-6">
-        <legend className="text-lg font-semibold text-gray-900 mb-4">Parte 1</legend>
-        <div className="space-y-4">
+    <form className="bg-white rounded-2xl p-8 shadow-sm border border-[#E8E6E0]">
+
+      <Section title="Parte 1">
+        <div>
+          <label className={labelClass}>Nombre completo</label>
+          <input type="text" value={formData.party1Name} onChange={(e) => handleChange('party1Name', e.target.value)} className={inputClass} placeholder="Nombre y apellidos" />
+        </div>
+        <div>
+          <label className={labelClass}>DNI / NIF</label>
+          <input type="text" value={formData.party1DNI} onChange={(e) => handleChange('party1DNI', e.target.value)} className={inputClass} placeholder="00000000X" />
+        </div>
+      </Section>
+
+      <Section title="Parte 2">
+        <div>
+          <label className={labelClass}>Nombre completo</label>
+          <input type="text" value={formData.party2Name} onChange={(e) => handleChange('party2Name', e.target.value)} className={inputClass} placeholder="Nombre y apellidos" />
+        </div>
+        <div>
+          <label className={labelClass}>DNI / NIF</label>
+          <input type="text" value={formData.party2DNI} onChange={(e) => handleChange('party2DNI', e.target.value)} className={inputClass} placeholder="00000000X" />
+        </div>
+      </Section>
+
+      <Section title="Condiciones">
+        <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className={labelClassName}>Nombre completo</label>
-            <input
-              type="text"
-              value={formData.party1Name}
-              onChange={(e) => handleChange('party1Name', e.target.value)}
-              className={inputClassName}
-              required
-            />
+            <label className={labelClass}>Fecha inicio</label>
+            <input type="date" value={formData.startDate} onChange={(e) => handleChange('startDate', e.target.value)} className={inputClass} />
           </div>
           <div>
-            <label className={labelClassName}>DNI</label>
-            <input
-              type="text"
-              value={formData.party1DNI}
-              onChange={(e) => handleChange('party1DNI', e.target.value)}
-              className={inputClassName}
-              required
-            />
+            <label className={labelClass}>Fecha fin</label>
+            <input type="date" value={formData.endDate} onChange={(e) => handleChange('endDate', e.target.value)} className={inputClass} />
           </div>
         </div>
-      </fieldset>
-
-      <fieldset className="border border-gray-200 rounded-lg p-6">
-        <legend className="text-lg font-semibold text-gray-900 mb-4">Parte 2</legend>
-        <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className={labelClassName}>Nombre completo</label>
-            <input
-              type="text"
-              value={formData.party2Name}
-              onChange={(e) => handleChange('party2Name', e.target.value)}
-              className={inputClassName}
-              required
-            />
+            <label className={labelClass}>Importe (EUR)</label>
+            <input type="number" value={formData.amount} onChange={(e) => handleChange('amount', e.target.value)} className={inputClass} placeholder="0.00" step="0.01" />
           </div>
           <div>
-            <label className={labelClassName}>DNI</label>
-            <input
-              type="text"
-              value={formData.party2DNI}
-              onChange={(e) => handleChange('party2DNI', e.target.value)}
-              className={inputClassName}
-              required
-            />
+            <label className={labelClass}>Forma de pago</label>
+            <select value={formData.paymentMethod} onChange={(e) => handleChange('paymentMethod', e.target.value as 'transfer' | 'cash' | 'bizum')} className={selectClass}>
+              <option value="transfer">Transferencia</option>
+              <option value="cash">Efectivo</option>
+              <option value="bizum">Bizum</option>
+            </select>
           </div>
         </div>
-      </fieldset>
-
-      <fieldset className="border border-gray-200 rounded-lg p-6">
-        <legend className="text-lg font-semibold text-gray-900 mb-4">Condiciones generales</legend>
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className={labelClassName}>Fecha de inicio</label>
-              <input
-                type="date"
-                value={formData.startDate}
-                onChange={(e) => handleChange('startDate', e.target.value)}
-                className={inputClassName}
-                required
-              />
-            </div>
-            <div>
-              <label className={labelClassName}>Fecha de fin</label>
-              <input
-                type="date"
-                value={formData.endDate}
-                onChange={(e) => handleChange('endDate', e.target.value)}
-                className={inputClassName}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className={labelClassName}>Importe (EUR)</label>
-              <input
-                type="number"
-                value={formData.amount}
-                onChange={(e) => handleChange('amount', e.target.value)}
-                className={inputClassName}
-                placeholder="0.00"
-                step="0.01"
-                required
-              />
-            </div>
-            <div>
-              <label className={labelClassName}>Forma de pago</label>
-              <select
-                value={formData.paymentMethod}
-                onChange={(e) => handleChange('paymentMethod', e.target.value as 'transfer' | 'cash' | 'bizum')}
-                className={inputClassName}
-                required
-              >
-                <option value="transfer">Transferencia bancaria</option>
-                <option value="cash">Efectivo</option>
-                <option value="bizum">Bizum</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </fieldset>
+      </Section>
 
       {contractType === 'services' && (
-        <fieldset className="border border-gray-200 rounded-lg p-6">
-          <legend className="text-lg font-semibold text-gray-900 mb-4">Detalles del servicio</legend>
-          <div className="space-y-4">
-            <div>
-              <label className={labelClassName}>Descripción del servicio</label>
-              <textarea
-                value={formData.serviceDescription || ''}
-                onChange={(e) => handleChange('serviceDescription', e.target.value)}
-                className={`${inputClassName} min-h-24`}
-                required
-              />
-            </div>
-            <div>
-              <label className={labelClassName}>Entregables pactados</label>
-              <textarea
-                value={formData.deliverables || ''}
-                onChange={(e) => handleChange('deliverables', e.target.value)}
-                className={`${inputClassName} min-h-24`}
-                required
-              />
-            </div>
+        <Section title="Servicio">
+          <div>
+            <label className={labelClass}>Descripción del servicio</label>
+            <textarea value={formData.serviceDescription || ''} onChange={(e) => handleChange('serviceDescription', e.target.value)} className={textareaClass} rows={3} placeholder="Describe el servicio a prestar..." />
           </div>
-        </fieldset>
+          <div>
+            <label className={labelClass}>Entregables pactados</label>
+            <textarea value={formData.deliverables || ''} onChange={(e) => handleChange('deliverables', e.target.value)} className={textareaClass} rows={3} placeholder="Lista los entregables acordados..." />
+          </div>
+        </Section>
       )}
 
       {contractType === 'rental' && (
-        <fieldset className="border border-gray-200 rounded-lg p-6">
-          <legend className="text-lg font-semibold text-gray-900 mb-4">Detalles del inmueble</legend>
-          <div className="space-y-4">
-            <div>
-              <label className={labelClassName}>Dirección del inmueble</label>
-              <textarea
-                value={formData.propertyAddress || ''}
-                onChange={(e) => handleChange('propertyAddress', e.target.value)}
-                className={`${inputClassName} min-h-20`}
-                required
-              />
-            </div>
-            <div>
-              <label className={labelClassName}>Fianza (EUR)</label>
-              <input
-                type="number"
-                value={formData.deposit || ''}
-                onChange={(e) => handleChange('deposit', e.target.value)}
-                className={inputClassName}
-                placeholder="0.00"
-                step="0.01"
-                required
-              />
-            </div>
+        <Section title="Inmueble">
+          <div>
+            <label className={labelClass}>Dirección del inmueble</label>
+            <textarea value={formData.propertyAddress || ''} onChange={(e) => handleChange('propertyAddress', e.target.value)} className={textareaClass} rows={2} placeholder="Calle, número, piso, ciudad..." />
           </div>
-        </fieldset>
+          <div>
+            <label className={labelClass}>Fianza (EUR)</label>
+            <input type="number" value={formData.deposit || ''} onChange={(e) => handleChange('deposit', e.target.value)} className={inputClass} placeholder="0.00" step="0.01" />
+          </div>
+        </Section>
       )}
 
       {contractType === 'collaboration' && (
-        <fieldset className="border border-gray-200 rounded-lg p-6">
-          <legend className="text-lg font-semibold text-gray-900 mb-4">Detalles de la colaboración</legend>
-          <div className="space-y-4">
+        <Section title="Colaboración">
+          <div>
+            <label className={labelClass}>Descripción del proyecto</label>
+            <textarea value={formData.projectDescription || ''} onChange={(e) => handleChange('projectDescription', e.target.value)} className={textareaClass} rows={3} placeholder="Describe el proyecto o colaboración..." />
+          </div>
+          <div className="grid grid-cols-2 gap-6">
             <div>
-              <label className={labelClassName}>Descripción del proyecto</label>
-              <textarea
-                value={formData.projectDescription || ''}
-                onChange={(e) => handleChange('projectDescription', e.target.value)}
-                className={`${inputClassName} min-h-24`}
-                required
-              />
+              <label className={labelClass}>{formData.party1Name || 'Parte 1'} (%)</label>
+              <input type="number" value={formData.party1Percentage || ''} onChange={(e) => handleChange('party1Percentage', e.target.value)} className={inputClass} placeholder="0" min="0" max="100" />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className={labelClassName}>Porcentaje {formData.party1Name || 'Parte 1'} (%)</label>
-                <input
-                  type="number"
-                  value={formData.party1Percentage || ''}
-                  onChange={(e) => handleChange('party1Percentage', e.target.value)}
-                  className={inputClassName}
-                  placeholder="0"
-                  min="0"
-                  max="100"
-                  required
-                />
-              </div>
-              <div>
-                <label className={labelClassName}>Porcentaje {formData.party2Name || 'Parte 2'} (%)</label>
-                <input
-                  type="number"
-                  value={formData.party2Percentage || ''}
-                  onChange={(e) => handleChange('party2Percentage', e.target.value)}
-                  className={inputClassName}
-                  placeholder="0"
-                  min="0"
-                  max="100"
-                  required
-                />
-              </div>
+            <div>
+              <label className={labelClass}>{formData.party2Name || 'Parte 2'} (%)</label>
+              <input type="number" value={formData.party2Percentage || ''} onChange={(e) => handleChange('party2Percentage', e.target.value)} className={inputClass} placeholder="0" min="0" max="100" />
             </div>
           </div>
-        </fieldset>
+        </Section>
       )}
 
-      <fieldset className="border border-gray-200 rounded-lg p-6">
-        <legend className="text-lg font-semibold text-gray-900 mb-4">Cláusulas adicionales</legend>
-        <div>
-          <label className={labelClassName}>Términos y condiciones adicionales</label>
-          <textarea
-            value={formData.additionalClauses}
-            onChange={(e) => handleChange('additionalClauses', e.target.value)}
-            className={`${inputClassName} min-h-32`}
-            placeholder="Añade aquí cualquier cláusula adicional o término especial..."
-          />
-        </div>
-      </fieldset>
+      <Section title="Cláusulas adicionales">
+        <textarea value={formData.additionalClauses} onChange={(e) => handleChange('additionalClauses', e.target.value)} className={textareaClass} rows={4} placeholder="Términos adicionales o condiciones especiales..." />
+      </Section>
+
     </form>
   );
 }
